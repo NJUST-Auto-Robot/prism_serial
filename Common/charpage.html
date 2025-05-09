@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" http-equiv="X-UA-Compatible" content="IE=5,6,7,8,9,10,11, chrome=1" />
+    <title></title>
+</head>
+
+<body>
+    <div id="main" style="width:1000px;height:500px;margin-left:-8px"></div>
+    <script src="echarts.js"></script>
+    <!-- <script src="dark.js"></script>
+    <script src="jquery.js"></script> -->
+    <script>
+        var base = +new Date(2014, 9, 3);
+        var oneDay = 24 * 3600 * 1000;
+        var date = [];
+        var data = [5, 20, 36, 10, 10, 20];
+        var now = new Date(base);
+
+        data = [Math.random() * 150];
+        // 指定图表的配置项和数据
+        function addData(shift) {
+            now = [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/');
+            date.push(now);
+            data.push((Math.random() - 0.4) * 10 + data[data.length - 1]);
+
+            if (shift) {
+                date.shift();
+                data.shift();
+            }
+
+            now = new Date(+new Date(now) + oneDay);
+        }
+
+        for (var i = 1; i < 100; i++) {
+            addData();
+        }
+
+        var myChart = echarts.init(document.getElementById('main'));
+        var option = {
+            title: {
+                text: '第一个 ECharts 实例'
+            },
+            tooltip: {},
+            legend: {
+                data: ['销量']
+            },
+            xAxis: {
+                //data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+                type: 'category',
+                boundaryGap: false,
+                data: date
+            },
+            yAxis: {},
+            series: [{
+                name: '销量',
+                type: 'bar',
+                data: data
+            },
+            {
+                name: '销量',
+                type: 'line',
+                smooth: true,
+                data: data
+            }]
+        };
+
+        setInterval(function () {
+            addData(true);
+            myChart.setOption({
+                xAxis: {
+                    data: date
+                },
+                series: [{
+                    data: data
+                },
+                {
+                    data: data
+                }]
+            });
+        }, 500);
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+        // 接收数据的方法
+        function receiveData(jsonData) {
+            // 解析 JSON 字符串为 JavaScript 对象
+            var data = JSON.parse(jsonData);
+
+            // 在控制台打印数据
+            console.log(data);
+
+            // 在页面上显示数据
+            var output = document.getElementById("output");
+            output.innerHTML = JSON.stringify(data);
+        }
+
+        // 注册 postDelegate
+        //window.postDelegate = receiveData;
+        function postMsg() {
+            var args = "hello,this msg come from webView2 JS!";
+            window.chrome.webview.postMessage(args);
+            alert("发送成功，内容：" + args);
+        }
+
+        // 在这里处理接收到c#的消息
+        window.chrome.webview.addEventListener("message", receiveMessage);
+        function receiveMessage(event) {
+            alert(JSON.stringify(event.data));
+            if (Array.isArray(event.data)) {
+                event.data.forEach(item => {
+                    addData(item);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

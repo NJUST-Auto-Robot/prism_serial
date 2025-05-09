@@ -1,0 +1,40 @@
+# 忽略生成的文件和目录
+bin/
+obj/
+.vs/
+# 忽略用户特定的项目文件
+*.user
+*.suo
+
+# 忽略 Visual Studio 临时文件、构建结果和发布输出
+*.log
+*.vspscc
+.vscode/
+.idea/
+*.userprefs
+*.userosscache
+*.orig
+
+# 忽略文件夹内的所有内容
+Model/bin/
+Model/obj/
+
+# 忽略其他不需要的文件
+*.tmp
+*.temp
+
+# 保留源码文件的更新
+!*.cs
+!*.xaml
+
+# 忽略解决方案和项目文件中的备份
+*.backup
+*.bak
+
+# 忽略 IDE 产生的文件
+*.userosscache
+*.sln.docstates
+
+# 保留重要的项目文件
+!prism_serial.csproj
+!prism_serial_.sln

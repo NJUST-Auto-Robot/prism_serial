@@ -1,0 +1,129 @@
+<!--
+ * @Author: Elaina
+ * @Date: 2024-07-16 17:22:54
+ * @LastEditors: chaffer-cold 1463967532@qq.com
+ * @LastEditTime: 2024-07-24 09:43:51
+ * @FilePath: \Common\mychart.html
+ * @Description: 
+ * 
+ * Copyright (c) 2024 by ${git_name_email}, All Rights Reserved. 
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns="https://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" http-equiv="X-UA-Compatible" content="IE=5,6,7,8,9,10,11, chrome=1" />
+    <title></title>
+</head>
+
+<body>
+    <div id="main" style="width:1000px;height:600px;margin-left:-8px"></div>
+    <script src="echarts.js"></script>
+    <script>
+        //添加加载动画
+       
+       //进行图表初始化
+        var myChart = echarts.init(document.getElementById('main'));
+        myChart.showLoading();
+      
+        //图表数据域
+        var data_x_axis;
+        var data_y_axis;
+        var data = {
+            x_axis: [],
+            y_axis: []
+        };
+        //图表设置
+        var option = {
+            title: {
+                text: ''
+            },
+            tooltip: {},
+            legend: {
+                data: ['数据']
+            },
+            xAxis: {
+                type: 'category',
+                // data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+                data: data.x_axis
+            },
+            yAxis: {},
+            series: [{
+                name: '数据',
+                type: 'line',
+                smooth: true,
+                // data: [5, 20, 36, 10, 10, 20]
+                data: data.y_axis
+            }]
+
+        };
+        myChart.setOption(option);
+        myChart.hideLoading();
+
+
+        function ChartUpdate() {
+            myChart.setOption({
+                xAxis: {
+                    data: data.x_axis
+                },
+                series: [{
+                    data: data.y_axis
+                }]
+            });
+        }
+        //增加的方法
+        /**
+         * @brief   给arr增加数据
+         * @param {*} arr
+         * @param {*} data 可以是一个数据或者一个数组
+         * @param {*} shift
+         * @return {*}
+         * @note: 
+         */
+        function AddData2Array(arr, data, shift = false) {
+            if (Array.isArray(data)) {
+                arr.push(...data); // 使用扩展运算符将 `data` 数组的元素添加到 `arr` 中
+            } else {
+                arr.push(data);
+            }
+
+            if (shift && Array.isArray(data)) {
+                arr.splice(0, data.length); // 移除 `arr` 中开头 `data` 数组长度的元素
+            } else if (shift) {
+                arr.shift(); // 如果 `data` 不是数组，移除一个元素
+            }
+        }
+
+        //与后端交互解析收到的数据
+        function receiveData(jsonData) {
+            // 解析 JSON 字符串为 JavaScript 对象
+            var data = JSON.parse(jsonData);
+        }
+        //给后端发消息
+        function postMsg() {
+            var args = "hello, this msg come from webView2 JS!";
+            window.chrome.webview.postMessage(args);
+            alert("发送成功，内容：" + args);
+        }
+        //接受的回调函数
+        function OnReceiveMessage(event) {
+            // alert(JSON.stringify(event.data));
+            try {
+                // var receiveData = JSON.parse(event.data); // 解析 JSON 字符串为 JavaScript 对象或数组
+                var receiveData = event.data;
+                // 在这里处理 receiveData 中的数据，例如：
+                AddData2Array(data.x_axis, receiveData._x);
+                AddData2Array(data.y_axis, receiveData._y);
+                ChartUpdate();
+            } catch (error) {
+                console.error("Error parsing JSON:", error); // 捕获并输出解析错误
+                console.log(event.data);
+            }
+        }
+        //注册回调函数
+        window.chrome.webview.addEventListener("message", OnReceiveMessage);
+
+    </script>
+</body>
+
+</html>
