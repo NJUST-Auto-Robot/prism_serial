@@ -35,6 +35,7 @@ namespace prism_serial.ViewModels
                 CarCommandToSerial(0.0f,0.0f,0.0f);
             });
             StartReadingController();
+            StartSendingData();
         }
         SerialPort _serial ;
         private View3Model _obj = new View3Model();
@@ -68,7 +69,25 @@ namespace prism_serial.ViewModels
                 
             }
         }
-
+        private async void StartSendingData()
+        {
+            // 持续异步发送数据
+            while (true)
+            {
+                if (_controller != null && _controller.IsConnected)
+                {
+                    // 发送数据到串口
+                    xboxSendToSerial();
+                    // 等待一段时间再继续发送
+                    await Task.Delay(50); // 100ms 轮询间隔，避免过于频繁
+                }
+                else
+                {
+                    // 如果控制器未连接，等待一段时间再重试
+                    await Task.Delay(1000); // 1秒后重试
+                }
+            }
+        }
         public GamepadState _xboxData
         {
             get => _obj.XboxData; set {SetProperty(ref _obj.XboxData,value); RaisePropertyChanged(); }
@@ -137,7 +156,7 @@ namespace prism_serial.ViewModels
 
             };
             //IsAPressed = (state.Gamepad.Buttons & GamepadButtonFlags.A) != 0;
-            xboxSendToSerial();
+            //xboxSendToSerial();
             Console.WriteLine($"LX: {_xboxData.LeftThumbX}, LY: {_xboxData.LeftThumbY}, RX: {_xboxData.RightThumbX}, RY: {_xboxData.RightThumbY}, LT: {_xboxData.LeftTrigger}, RT: {_xboxData.RightTrigger}");
         }
         //对原始数据进行处理
