@@ -176,17 +176,24 @@ namespace prism_serial.ViewModels
                     var thumby = (short)xboxDataHandle(_xboxData.LeftThumbY);
                     //通过串口发送数据帧头为0xED
                     //byte[] data = new byte[9];
-
+                    
 
                     byte[] xBytes = BitConverter.GetBytes(thumbx);
                     byte[] yBytes = BitConverter.GetBytes(thumby);
-
+                    byte[] rightxBytes = BitConverter.GetBytes((short)xboxDataHandle(_xboxData.RightThumbX));
+                    byte[] rightyBytes = BitConverter.GetBytes((short)xboxDataHandle(_xboxData.RightThumbY));
                     // 使用 List<byte> 动态拼接数组
                     List<byte> dataList = new List<byte>();
                     dataList.Add(0xED); // 添加帧头
                     dataList.AddRange(xBytes); // 添加 xBytes
                     dataList.AddRange(yBytes); // 添加 yBytes
-                                                  
+                    dataList.AddRange(rightxBytes); // 添加右侧xBytes
+                    dataList.AddRange(rightyBytes); // 添加右侧yBytes
+                    //添加A B X Y
+                    dataList.Add(_xboxData.IsAPressed ? (byte)0x01 : (byte)0x00); // 添加 A 按钮状态
+                    dataList.Add(_xboxData.IsBPressed ? (byte)0x01 : (byte)0x00); // 添加 B 按钮状态
+                    dataList.Add(_xboxData.IsXPressed ? (byte)0x01 : (byte)0x00); // 添加 X 按钮状态
+                    dataList.Add(_xboxData.IsYPressed ? (byte)0x01 : (byte)0x00); // 添加 Y 按钮状态
                     // 将 List<byte> 转换为 byte[]
                     byte[] data = dataList.ToArray();
                     _serial.Write(data, 0, data.Length);
