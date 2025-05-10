@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*'  # 仅在发布 tag 时运行，例如 v1.0.0
+    branches: [ "git","test"]  #推送到[]分支时触发
   workflow_dispatch:
 
 jobs:
