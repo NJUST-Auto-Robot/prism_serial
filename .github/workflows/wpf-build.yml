@@ -42,4 +42,4 @@ jobs:
           tag_name: ${{ github.ref_name }}
           files: ./publish/*.exe
         env:
-          token: ${{ secrets.GH_TOKEN }}  # 使用您的个人访问令牌
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
