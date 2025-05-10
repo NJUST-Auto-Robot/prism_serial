@@ -30,6 +30,8 @@ namespace prism_serial.Model
             public bool IsXPressed { get; set; }
             public bool IsYPressed { get; set; }
 
+            public bool IsLBPressed { get; set; }
+            public bool IsRBPressed { get; set; }
         }
         [AddINotifyPropertyChangedInterface]
         public class carState

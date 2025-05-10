@@ -152,11 +152,14 @@ namespace prism_serial.ViewModels
                 IsAPressed = (state.Gamepad.Buttons & GamepadButtonFlags.A) != 0,
                 IsBPressed = (state.Gamepad.Buttons & GamepadButtonFlags.B) != 0,
                 IsXPressed = (state.Gamepad.Buttons & GamepadButtonFlags.X) != 0,
-                IsYPressed = (state.Gamepad.Buttons & GamepadButtonFlags.Y) != 0
+                IsYPressed = (state.Gamepad.Buttons & GamepadButtonFlags.Y) != 0,
+                IsLBPressed = (state.Gamepad.Buttons & GamepadButtonFlags.LeftShoulder) != 0,
+                IsRBPressed = (state.Gamepad.Buttons & GamepadButtonFlags.RightShoulder) != 0,
 
             };
             //IsAPressed = (state.Gamepad.Buttons & GamepadButtonFlags.A) != 0;
             //xboxSendToSerial();
+            xboxVibration();
             Console.WriteLine($"LX: {_xboxData.LeftThumbX}, LY: {_xboxData.LeftThumbY}, RX: {_xboxData.RightThumbX}, RY: {_xboxData.RightThumbY}, LT: {_xboxData.LeftTrigger}, RT: {_xboxData.RightTrigger}");
         }
         //对原始数据进行处理
@@ -222,6 +225,35 @@ namespace prism_serial.ViewModels
                 {
                     Console.WriteLine($"Error sending data to serial port: {ex.Message}");
                 }
+            }
+        }
+        private void xboxVibration()
+        {
+            if (_controller != null && _controller.IsConnected)
+            {
+                //如果同时按下A和B键，设置震动
+                if(_xboxData.IsLBPressed && _xboxData.IsRBPressed)
+                {
+                    // 设置震动强度
+                    var vibration = new Vibration
+                    {
+                        LeftMotorSpeed = 65535,
+                        RightMotorSpeed = 65535
+                    };
+                    _controller.SetVibration(vibration);
+                }
+                else
+                {
+                    // 停止震动
+                    var vibration = new Vibration
+                    {
+                        LeftMotorSpeed = 0,
+                        RightMotorSpeed = 0
+                    };
+                    _controller.SetVibration(vibration);
+                }
+                // 设置震动强度
+              
             }
         }
         private void CarCommandToSerial(float linear_x,float linear_y,float angular_z)
