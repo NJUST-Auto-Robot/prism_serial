@@ -34,7 +34,10 @@ jobs:
         with:
           name: wpf-app
           path: ./publish/
-
+      - name: Zip publish folder
+        shell: pwsh
+        run: |
+          Compress-Archive -Path (Get-ChildItem -Path ./publish -Recurse) -DestinationPath ./wpf-app.zip    
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
