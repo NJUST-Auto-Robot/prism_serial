@@ -20,7 +20,7 @@ namespace prism_serial.ViewModels
             _controller = null;
            
             CarCommand = new DelegateCommand(() => {
-            CarCommandToSerial(_xboxData.LeftThumbX, _xboxData.LeftThumbY, _xboxData.RightThumbX);
+            CarCommandToSerial(_carData.ControlX,_carData.ControlY,_carData.ControlYaw);
             });
             ClearCommand = new DelegateCommand(() =>
             {
@@ -300,7 +300,7 @@ namespace prism_serial.ViewModels
                 }
                 dataList.Add(frameTail); // 添加帧尾
                 byte[] combinedBytes = dataList.ToArray();
-                _serial.Write(combinedBytes, 0, 15);
+                _serial.Write(combinedBytes, 0, combinedBytes.Length);
             }
         }
         
