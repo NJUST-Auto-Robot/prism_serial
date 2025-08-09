@@ -34,6 +34,10 @@ namespace prism_serial.ViewModels
                 
                 CarCommandToSerial(0.0f,0.0f,0.0f);
             });
+            ResetCommand = new DelegateCommand(() =>
+            { byte[] datas = { 0x0d, 0x00, 0x07, 0x21 };
+                _serial.Write(datas, 0, datas.Length);
+            });
             StartReadingController();
             StartSendingData();
         }
@@ -108,6 +112,7 @@ namespace prism_serial.ViewModels
         //清零设定值
         public DelegateCommand ClearCommand { get; set; }
 
+        public DelegateCommand ResetCommand { get; set; }
         public List<string> TextListControl
         {
             get => _obj.TextListControl;

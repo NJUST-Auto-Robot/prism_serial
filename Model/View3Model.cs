@@ -48,7 +48,11 @@ namespace prism_serial.Model
             void OnControlXChanged() => ControlXString = ControlX.ToString("F2");
             void OnControlYChanged() => ControlYString = ControlY.ToString("F2");
             void OnControlYawChanged() => ControlYawString = ControlYaw.ToString("F2");
-            
+            void OnControlXStringChanged() => ControlX = float.Parse(ControlXString);
+            void OnControlYStringChanged() => ControlY = float.Parse(ControlYString);
+            void OnControlYawStringChanged() => ControlYaw = float.Parse(ControlYawString);
+
+
         }
         public enum ControlMode_t
         {

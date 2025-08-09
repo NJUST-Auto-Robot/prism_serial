@@ -54,23 +54,23 @@
             <Label Content="模式" DockPanel.Dock="Top" FontSize="15" Margin="20 " FontFamily="Consolas" FontWeight="Bold" />
             <ComboBox DockPanel.Dock="Top" ItemsSource="{Binding TextListControl}" Text="{Binding TextListSelected}" Margin="20,0,20,20" />
             <StackPanel DockPanel.Dock="Top" Margin="20,10,5,20" Orientation="Horizontal">
-                <TextBox x:Name="text1" Width="40" Margin="0,10,0,10" Text="{Binding _carData.ControlXString}" />
+                <TextBox x:Name="text1" Width="40" Margin="0,10,0,10" Text="{Binding _carData.ControlXString}" KeyDown="TextBox_KeyDown" />
                 <Slider Width="120" DockPanel.Dock="Top" Style="{StaticResource MaterialDesign3.MaterialDesignSlider}" Minimum="-1" Maximum="1" Value="{Binding _carData.ControlX}" Margin="10,10,10,10" />
             </StackPanel>
 
             <StackPanel DockPanel.Dock="Top" Margin="20,10,5,20" Orientation="Horizontal">
-                <TextBox x:Name="text2" Width="40" Margin="0,10,0,10" Text="{Binding _carData.ControlYString}" />
+                <TextBox x:Name="text2" Width="40" Margin="0,10,0,10" Text="{Binding _carData.ControlYString}" KeyDown="TextBox_KeyDown" />
                 <Slider  Width="120" DockPanel.Dock="Top" Minimum="-1" Maximum="1" Value="{Binding _carData.ControlY,UpdateSourceTrigger=PropertyChanged}" Margin="10,10,10,10" Style="{StaticResource MaterialDesign3.MaterialDesignSlider}" />
             </StackPanel>
             <StackPanel DockPanel.Dock="Top" Margin="20,10,5,20" Orientation="Horizontal">
-                <TextBox x:Name="text3" Width="40" Margin="0,10,0,10" Text="{Binding _carData.ControlYawString}" />
+                <TextBox x:Name="text3" Width="40" Margin="0,10,0,10" Text="{Binding _carData.ControlYawString}" KeyDown="TextBox_KeyDown"  />
                 <Slider Width="120" DockPanel.Dock="Top" Minimum="-1" Maximum="1" Value="{Binding _carData.ControlYaw}" Margin="10,10,10,10" Style="{StaticResource MaterialDesign3.MaterialDesignSlider}" />
             </StackPanel>
             <Button Content="发指令" Margin="20,0,20,0" DockPanel.Dock="Top" Command="{Binding CarCommand}" />
             <Button Content="停止" Margin="20,20,20,0" DockPanel.Dock="Top" Command="{Binding CarStopCommand}" />
 
-            <Button Content="清零"  Margin="20,0,20,0" DockPanel.Dock="Top" Command="{Binding ClearCommand}" />
-
+            <Button Content="清零"  Margin="20,20,20,0" DockPanel.Dock="Top" Command="{Binding ClearCommand}" />
+            <Button Content="小车重置"  Margin="20,0,20,0" DockPanel.Dock="Top" Command="{Binding ResetCommand}" />
            
         </DockPanel>
 
