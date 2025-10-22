@@ -8,10 +8,11 @@ namespace prism_serial.Model
     {
         public View3Model()
         {
-            carData.ControlXString= carData.ControlX.ToString("F2");
+            carData.ControlXString = carData.ControlX.ToString("F2");
             carData.ControlYString = carData.ControlY.ToString("F2");
             carData.ControlYawString = carData.ControlYaw.ToString("F2");
             TextListSelected = "车身速度";
+            ShootSequenceSelected= "红绿蓝";
             ControlMode = ControlMode_t.SpeedControlSelf;
         }
         public bool IsAPressed { get; set; }
@@ -36,11 +37,11 @@ namespace prism_serial.Model
         [AddINotifyPropertyChangedInterface]
         public class carState
         {
-            
+
             public string ControlXString { get; set; }
             public string ControlYString { get; set; }
             public string ControlYawString { get; set; }
-            
+
             public float ControlX { get; set; }
             public float ControlY { get; set; }
             public float ControlYaw { get; set; }
@@ -63,5 +64,7 @@ namespace prism_serial.Model
         public ControlMode_t ControlMode { get; set; }
         public string TextListSelected { get; set; }
         public List<string> TextListControl { get; set; } = new() { "车身速度", "大地速度", "位置闭环" };
+        public List<string> ShootSequence { get; set; } = new() { "红绿蓝", "红蓝绿", "蓝红绿", "绿蓝红", "蓝绿红", "绿蓝红" };
+        public string ShootSequenceSelected { get; set; }
     }
 }

@@ -38,6 +38,10 @@ namespace prism_serial.ViewModels
             { byte[] datas = { 0x0d, 0x00, 0x07, 0x21 };
                 _serial.Write(datas, 0, datas.Length);
             });
+            ShootCommand = new DelegateCommand(() =>
+            {
+                OnShoot();
+            });
             StartReadingController();
             StartSendingData();
         }
@@ -113,6 +117,7 @@ namespace prism_serial.ViewModels
         public DelegateCommand ClearCommand { get; set; }
 
         public DelegateCommand ResetCommand { get; set; }
+        public DelegateCommand ShootCommand { get; set; }
         public List<string> TextListControl
         {
             get => _obj.TextListControl;
@@ -137,6 +142,16 @@ namespace prism_serial.ViewModels
                     ControlMode = View3Model.ControlMode_t.LocationControl;
                 }
             }
+        }
+        public List<string> ShootSequence
+        {
+            get => _obj.ShootSequence;
+            set => _obj.ShootSequence = value;
+        }
+        public string SequenceSelected
+        {
+            get => _obj.ShootSequenceSelected;
+            set => _obj.ShootSequenceSelected = value;
         }
         //private Timer _timer;
         private Controller _controller;
@@ -259,6 +274,21 @@ namespace prism_serial.ViewModels
                 }
                 // 设置震动强度
               
+            }
+        }
+        private void OnShoot()
+        {
+            if (_serial.IsOpen)
+            {
+                //查找被选项对应数组的索引
+                var index=ShootSequence.IndexOf(SequenceSelected);
+
+                List<byte> bytes = new List<byte>();
+                bytes.Add(0xCE);
+                bytes.Add((byte)index);
+                bytes.Add(0xCE);
+                byte[] data = bytes.ToArray();
+                _serial.Write(data, 0, data.Length);
             }
         }
         private void CarCommandToSerial(float linear_x,float linear_y,float angular_z)
